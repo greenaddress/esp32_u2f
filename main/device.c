@@ -177,8 +177,9 @@ static bool IRAM_ATTR toggle_led(gptimer_handle_t timer, const gptimer_alarm_eve
     {
         status->blink_status = 0;
     }
-
+#ifdef CONFIG_BLINK_GPIO
     gpio_set_level(CONFIG_BLINK_GPIO, status->blink_status);
+#endif
 
     if (status->blink_timeout != UINT32_MAX)
     {
@@ -190,9 +191,11 @@ static bool IRAM_ATTR toggle_led(gptimer_handle_t timer, const gptimer_alarm_eve
 void init_blinking()
 {
 
+#ifdef CONFIG_BLINK_GPIO
     gpio_reset_pin(CONFIG_BLINK_GPIO);
     /* Set the GPIO as a push/pull output */
     gpio_set_direction(CONFIG_BLINK_GPIO, GPIO_MODE_OUTPUT);
+#endif
 
     gptimer_config_t timer_config = {
         .clk_src = GPTIMER_CLK_SRC_DEFAULT,
